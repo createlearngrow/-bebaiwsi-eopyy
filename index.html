@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="el">
 <head>
@@ -117,7 +118,7 @@ body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 16px; font-
     <div class="fsec">
       <h3>Χρονικό Διάστημα & Έκδοση</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-        <div class="fg"><label>Από</label><input type="date" id="pFrom" onchange="onFromChange()"></div>
+        <div class="fg"><label>Από</label><input type="date" id="pFrom" onchange="onPeriodChange()"></div>
         <div class="fg"><label>Έως</label><input type="date" id="pTo" onchange="onPeriodToChange()"></div>
       </div>
       <div class="fg"><label>Ημερομηνία Έκδοσης</label><input type="date" id="issDate"></div>
@@ -409,29 +410,6 @@ function toggleT(t){
   const f=document.getElementById('f-'+t);
   if(document.getElementById(map[t]).checked){f.classList.add('active');calcSessions(t);}
   else f.classList.remove('active');
-}
-function onFromChange(){
-  const from = document.getElementById('pFrom').value;
-  if(from){
-    // Σωστός υπολογισμός: ίδια μέρα επόμενου μήνα, μείον 1 ημέρα
-    // Π.χ. 25/05 → επόμενος μήνας ίδια μέρα = 25/06 → μείον 1 = 24/06
-    const d = new Date(from + 'T00:00:00');
-    const day = d.getDate();
-    const month = d.getMonth(); // 0-based
-    const year = d.getFullYear();
-    // Σωστός υπολογισμός: ίδια μέρα επόμενου μήνα, μείον 1 ημέρα
-    // Π.χ. 25/05 → 25/06 - 1 = 24/06 ✅
-    // Π.χ. 31/01 → 31/02 δεν υπάρχει, JS → 03/03 - 1 = 02/03 ✅
-    const nextMonth = month + 1 > 11 ? 0 : month + 1;
-    const nextYear = month + 1 > 11 ? year + 1 : year;
-    // Φτιάχνω ημερομηνία με ίδια μέρα στον επόμενο μήνα
-    const sameDayNextMonth = new Date(nextYear, nextMonth, day);
-    // Αφαιρώ 1 ημέρα για να πάρω "ίδια μέρα - 1"
-    const to = new Date(nextYear, nextMonth, day - 1);
-    document.getElementById('pTo').value = dk(to);
-    document.getElementById('issDate').value = dk(to);
-  }
-  onPeriodChange();
 }
 function onPeriodChange(){
   ['logo','ergo','psyho','eidiki'].forEach(t=>{
